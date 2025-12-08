@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using DataAccessLibrary;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WaterDropApp.Data;
-using WaterDropApp.Models.WaterDropApp;
 
 namespace WaterDropApp.Controllers
 {
@@ -23,7 +21,5 @@ namespace WaterDropApp.Controllers
             await _dbContext.SaveChangesAsync();
             return CreatedAtAction("GetCustomer", new { id = customer.ExternalCode }, customer);
         }
-
-
     }
 }

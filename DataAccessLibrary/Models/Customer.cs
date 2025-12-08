@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WaterDropApp.Models
+namespace DataAccessLibrary
 {
-    //Class to display data
+    //Class to get data
     public class Customer
     {
-        //[Key]
+        [Key]
         public int? ExternalCode { get; set; }
         public int? MpCode { get; set; }
         public string? Name { get; set; }

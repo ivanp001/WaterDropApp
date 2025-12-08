@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
-namespace WaterDropApp.Models
+namespace DataAccessLibrary
 {
-    //Class to display data
+    //Class to get data
     //[PrimaryKey(nameof(reg1Value), nameof(regDate))]
     public class Value
     {
