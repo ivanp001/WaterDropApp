@@ -1,16 +1,20 @@
+using Microsoft.EntityFrameworkCore;
+using WaterDropApp.Data;
+
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-
+builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-var app = builder.Build();
+//for SQL, instal SQL package and .useSQLserver
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseInMemoryDatabase(builder.Configuration.GetConnectionString("TestDB")));
 
-// Configure the HTTP request pipeline.
+var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
+    app.UseSwagger();
+    app.UseSwaggerUI();
     app.MapOpenApi();
 }
 
