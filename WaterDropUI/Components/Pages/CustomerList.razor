@@ -1,0 +1,52 @@
+﻿@page "/CustomersList"
+
+<h3>Customers List</h3>
+
+@* //TO DO show values list for selected customer *@
+
+
+
+
+
+<EditForm class="form-inline my-2 row g-3" Model="@customerModel" OnValidSubmit="AddCustomer">
+
+    <div class="col-lg-4">
+        @* bind  list values *@
+        <InputText class="form-control mx-2" @bind-Value="customerModel.Name" />
+    </div>
+    <div class="col-auto">
+        <button class="btn btn-outline-primary" type="submit">Add Name</button>
+    </div>
+</EditForm>
+
+<div class="mx-2 row g-3 col-lg-4">
+    <ul class="list-group">
+        @foreach (var customer in customerList)
+
+        {
+            <li class="list-group-item list-group-item-success  my-1"
+                onclick="CustomerDetails">
+                @customer.Name
+            </li>
+        }
+
+    </ul>
+</div>
+@code {
+    //TODO Use DataAccess Layer
+
+    public List<Customer> customerList = new List<Customer>();
+
+    private Customer customerModel = new Customer();
+
+    private void AddCustomer()
+    {
+        customerList.Add(customerModel);
+        customerModel = new Customer();
+    }
+
+    private void CustomerDetails()
+    {
+        //load customer details
+    }
+}

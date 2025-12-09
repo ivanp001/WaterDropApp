@@ -1,0 +1,70 @@
+﻿@page "/ValueList"
+@inject NavigationManager Navigation
+
+<h3>Values List</h3>
+
+@* //TODO Show Customer data *@
+
+
+
+
+
+<button class="btn btn-primary" @onclick="NavigateToValuesDetails">
+    New Value
+</button>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Reg1Value
+            </th>
+            <th>
+                RegDate
+            </th>
+            <th>
+                VlueTypeDescription
+            </th>
+            <th>
+                ValueTypeUnit
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var value in valuesList)
+        {
+            <tr>
+                <td>
+                    @value.reg1Value
+                </td>
+                <td>
+                    @value.regDate
+                </td>
+                <td>
+                    @value.valueTypeDescription
+                </td>
+                <td>
+                    @value.valueTypeUnit
+                </td>
+                <td></td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+@code {
+    //TODO Use DataAccess Layer
+
+    private void NavigateToValuesDetails() => Navigation.NavigateTo("ValueDetails");
+    public List<Value> valuesList = new List<Value>();
+    private Value valueModel = new Value();
+
+    private void AddValues()
+
+    {
+        valuesList.Add(valueModel);
+        valueModel = new Value();
+    }
+}

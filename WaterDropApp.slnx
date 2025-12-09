@@ -1,4 +1,5 @@
 <Solution>
   <Project Path="DataAccessLibrary/DataAccessLibrary.csproj" Id="5d917150-7c29-4a32-b40f-800dddf9ccb5" />
   <Project Path="WaterDropApp/WaterDropApp.csproj" />
+  <Project Path="WaterDropUI/WaterDropUI.csproj" Id="7713fc95-413b-4f14-a603-1d3ae241a642" />
 </Solution>

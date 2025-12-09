@@ -1,0 +1,71 @@
+﻿@page "/ValueDetails"
+
+<h3>Value Details</h3>
+
+<div class="col-lg-4">
+    <EditForm class="form-inline my-2 row g-3" Model="@valueModel" OnValidSubmit="AddValues">
+        <InputNumber class="form-control mx-2 my-2" @bind-value="valueModel.reg1Value" />
+        <InputDate class="form-control mx-2 my-2" @bind-value="valueModel.regDate" />
+        <InputText class="form-control mx-2 my-2" @bind-Value="valueModel.valueTypeDescription" />
+        <InputText class="form-control mx-2 my-2" @bind-Value="valueModel.valueTypeUnit" />
+        <div class="col-auto">
+            <button class="btn btn-success" type="submit">Add Value</button>
+        </div>
+
+    </EditForm>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Reg1Value
+            </th>
+            <th>
+                RegDate
+            </th>
+            <th>
+                VlueTypeDescription
+            </th>
+            <th>
+                ValueTypeUnit
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var value in valuesList)
+        {
+            <tr>
+                <td>
+                    @value.reg1Value
+                </td>
+                <td>
+                    @value.regDate
+                </td>
+                <td>
+                    @value.valueTypeDescription
+                </td>
+                <td>
+                    @value.valueTypeUnit
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+
+@code {
+    //TODO Use DataAccess Layer
+
+    public List<Value> valuesList = new List<Value>();
+    private Value valueModel = new Value();
+
+    private void AddValues()
+
+    {
+        valuesList.Add(valueModel);
+        valueModel = new Value();
+    }
+}

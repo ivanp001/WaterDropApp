@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
-
-namespace WaterDropApp.Models
+﻿namespace WaterDropAppUI.Models
 {
     //Class to display data
     //[PrimaryKey(nameof(reg1Value), nameof(regDate))]
