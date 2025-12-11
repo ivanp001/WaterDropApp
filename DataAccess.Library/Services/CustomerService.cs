@@ -29,23 +29,23 @@ namespace DataAccess.Library.Services
 
         public async Task<Customer> GetCustomerByIdAsync(int Id)
         {
+            //FindAsync() lookup of a single entity when its primary key is known
             var CustomerById = await _db.Customer.FindAsync(Id);
-            if (CustomerById is null)
+
+            if (CustomerById is not null)
+            {
+                return CustomerById;
+            }
+            else
             {
                 throw new Exception($"Customer with Id: {Id} not found");
             }
-            else
-                return CustomerById;
         }
 
         public async Task UpdateCustomerAsync(Customer Customer)
         {
             var ExistingCustomer = _db.Customer.FindAsync(Customer.ExternalCode);
-            if (ExistingCustomer.Result is null)
-            {
-                throw new Exception($"Customer with Id {Customer.ExternalCode} not found.");
-            }
-            else
+            if (ExistingCustomer.Result is not null)
             {
                 ExistingCustomer.Result.MpCode = Customer.MpCode;
                 ExistingCustomer.Result.Name = Customer.Name;
@@ -53,6 +53,10 @@ namespace DataAccess.Library.Services
                 ExistingCustomer.Result.SerialNo = Customer.SerialNo;
                 ExistingCustomer.Result.Values = Customer.Values;
                 //to do map  values
+            }
+            else
+            {
+                throw new Exception($"Customer with Id {Customer.ExternalCode} not found.");
             }
             _db.Update(Customer);
             await _db.SaveChangesAsync();

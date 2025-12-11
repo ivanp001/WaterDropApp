@@ -6,7 +6,6 @@ namespace DataAccess.Library
 
     public class Value
     {
-        public int CustomerId { get; set; }
         public double? Reg1Value { get; set; }
         public DateTime? RegDate { get; set; }
         public string? ValueTypeDescription { get; set; }

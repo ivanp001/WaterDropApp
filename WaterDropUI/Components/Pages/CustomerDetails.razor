@@ -1,18 +1,31 @@
 ﻿@page "/customerDetails"
-@using DataAccess.Library
-@using DataAccess.Library.Services
-@using System.Threading.Tasks
 
 @inject ICustomerService _customerService
 @inject IValueService _valueService;
 @inject NavigationManager Navigation
 
-<h3>New Customer</h3>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="d-flex justify-content-start">
+                <h3>New Customer</h3>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="d-flex justify-content-end">
+
+                <button class="btn btn-outline-primary" @onclick="() => NavigateToCustomersList()">
+                    Customers List
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="container">
     <div class="row">
         <div class="col-sm-4">
-            <EditForm class="form-inline my-2 row g-3" Model="@CustomerModel" OnValidSubmit="AddCustomer">
+            <EditForm class="form-inline row g-3" Model="@CustomerModel" OnValidSubmit="AddCustomer">
                 <DataAnnotationsValidator />
                 <ValidationSummary />
                 <InputText class="form-control mx-2" @bind-Value="CustomerModel.Name" Placeholder="Name" />
@@ -20,101 +33,103 @@
                 <InputText class="form-control mx-2" @bind-Value="CustomerModel.Street" Placeholder="Street" />
                 <InputNumber class="form-control mx-2" @bind-Value="CustomerModel.SerialNo" Placeholder="SerialNo" />
                 <div class="d-flex justify-content-end">
-                    <button class="btn btn-primary" type="submit">Add Customer</button>
+                    <button class="btn btn-primary" type="submit">
+                        Submit
+                    </button>
                 </div>
             </EditForm>
         </div>
     </div>
-</div>
 
-<h4>Customers List</h4>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Name
-            </th>
-            <th>
-                MpCode
-            </th>
-            <th>
-                Street
-            </th>
-            <th>
-                Serial No
-            </th>
-        </tr>
-    </thead>
-    <tbody>
 
-        @foreach (var customer in CustomerList)
-        {
+    <h5>Customers List</h5>
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    @* TODO:Ternary operator *@
-                    @if (CustomerLoaded)
-                    {
-                        @SelectedCustomer?.Name
-                    }
-                    else
-                    {
-                        @customer.Name
-                    }
-                </td>
-                <td>
-                    @if (CustomerLoaded)
-                    {
-                        @SelectedCustomer?.MpCode
-                    }
-                    else
-                    {
-                        @customer.MpCode
-                    }
-                </td>
-                <td>
-                    @if (CustomerLoaded)
-                    {
-                        @SelectedCustomer?.Street
-                    }
-                    else
-                    {
-                        @customer.Street
-                    }
-                </td>
-                <td>
-                    @if (CustomerLoaded)
-                    {
-                        @SelectedCustomer?.SerialNo
-                    }
-                    else
-                    {
-                        @customer.SerialNo
-                    }
-                </td>
-                <td>
-                    <button class="btn btn-outline-primary btn-sm"
-                            @onclick="() => NavigateToValuesList(customer.ExternalCode)">
-                        Values List
-                    </button>
-
-                </td>
-                <td>
-                    <button class="btn btn-outline-success btn-sm"
-                            @onclick="() => NavigateToValuesDetails()">
-                        New Value
-                    </button>
-                </td>
+                <th>
+                    Name
+                </th>
+                <th>
+                    MpCode
+                </th>
+                <th>
+                    Street
+                </th>
+                <th>
+                    Serial No
+                </th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
 
+            @foreach (var customer in CustomerList)
+            {
+                <tr>
+                    <td>
+                        @* TODO:Ternary operator *@
+                        @if (CustomerLoaded)
+                        {
+                            @SelectedCustomer?.Name
+                        }
+                        else
+                        {
+                            @customer.Name
+                        }
+                    </td>
+                    <td>
+                        @if (CustomerLoaded)
+                        {
+                            @SelectedCustomer?.MpCode
+                        }
+                        else
+                        {
+                            @customer.MpCode
+                        }
+                    </td>
+                    <td>
+                        @if (CustomerLoaded)
+                        {
+                            @SelectedCustomer?.Street
+                        }
+                        else
+                        {
+                            @customer.Street
+                        }
+                    </td>
+                    <td>
+                        @if (CustomerLoaded)
+                        {
+                            @SelectedCustomer?.SerialNo
+                        }
+                        else
+                        {
+                            @customer.SerialNo
+                        }
+                    </td>
+                    <td>
+                        <button class="btn btn-outline-primary btn-sm"
+                                @onclick="() => NavigateToValuesList(customer.ExternalCode)">
+                            Values List
+                        </button>
+
+                    </td>
+                    <td>
+                        <button class="btn btn-outline-success btn-sm"
+                                @onclick="() => NavigateToValuesDetails(customer.ExternalCode)">
+                            New Value
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 @code {
 
-    private void NavigateToCustomersList() => Navigation.NavigateTo("customersList");
+    private void NavigateToCustomersList() => Navigation.NavigateTo("/");
     private void NavigateToValuesList(int? Id) => Navigation.NavigateTo($"valuesList/{Id}");
-    private void NavigateToValuesDetails() => Navigation.NavigateTo("valueDetails");
+    private void NavigateToValuesDetails(int? Id) => Navigation.NavigateTo($"valueDetails/{Id}");
 
     public Customer? SelectedCustomer { get; set; }
     private bool CustomerLoaded = false;
@@ -128,22 +143,8 @@
     protected override async Task OnInitializedAsync()
     {
         CustomerList = await _customerService.GetAllCustomersAsync();
-        //valuesList = await _valueService.GetAllValuesAsync();
     }
 
-    private async Task AddValues()
-    {
-        Value Value = new Value
-        {
-            Reg1Value = ValueModel.Reg1Value,
-            RegDate = ValueModel.RegDate,
-            ValueTypeDescription = ValueModel.ValueTypeDescription,
-            ValueTypeUnit = ValueModel.ValueTypeUnit
-        };
-        await _valueService.AddValueAsync(Value);
-        ValuesList.Add(Value);
-
-    }
     private async Task AddCustomer()
     {
         Customer Customer = new Customer

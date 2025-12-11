@@ -1,17 +1,15 @@
 ﻿@page "/valuesList/{customerId:int}"
-@using DataAccess.Library
-@using DataAccess.Library.Services
-@inject NavigationManager Navigation
-@inject IValueService _valueService;
 @inject ICustomerService _customerService
+@inject IValueService _valueService;
+@inject NavigationManager Navigation
 
 <div class="container">
     <div class="row">
         <div class="col-sm-6">
-            <div class=" d-flex justify-content-Start">
+            <div class=" d-flex justify-content-start">
                 <h3>Values List For: @SelectedCustomer?.Name</h3>
             </div>
-        </div> 
+        </div>
         <div class="col-sm-3">
             <div class=" d-flex justify-content-end">
                 <button class="btn btn-outline-primary" @onclick="NavigateToCustomersList">
@@ -21,7 +19,7 @@
         </div>
         <div class="col-sm-3">
             <div class=" d-flex justify-content-end">
-                <button class="btn btn-primary" @onclick="NavigateToValuesDetails">
+                <button class="btn btn-primary" @onclick="() => NavigateToValuesDetails(CustomerId)">
                     New Value
                 </button>
             </div>
@@ -47,7 +45,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var value in CustomerValues)
+            @foreach (var value in SelectedCustomer?.Values)
             {
                 <tr>
                     <td>
@@ -70,41 +68,23 @@
 </div>
 
 @code {
+
+    private void NavigateToCustomersList() => Navigation.NavigateTo("/");
+    private void NavigateToValuesDetails(int? Id) => Navigation.NavigateTo($"valueDetails/{Id}");
+
     [Parameter]
     public int CustomerId { get; set; }
     public Customer? SelectedCustomer { get; set; }
     public List<Value>? CustomerValues { get; set; }
-    private void NavigateToCustomersList() => Navigation.NavigateTo("customersList");
-    private void NavigateToValuesDetails() => Navigation.NavigateTo("valueDetails");
-
     public List<Value> ValuesListData;
     private DisplayValueModel ValueModel = new DisplayValueModel();
 
     protected override async Task OnInitializedAsync()
     {
-        CustomerValues = await _valueService.GetValuesByIdAsync(CustomerId);
         SelectedCustomer = await _customerService.GetCustomerByIdAsync(CustomerId);
-    }
-
-    private async Task LoadCustomer(int customerId)
-    {
-        SelectedCustomer = await _customerService.GetCustomerByIdAsync(customerId);
-    }
-
-    private async Task AddValues()
-    {
-        Value Value = new Value
+        if (SelectedCustomer.Values is null)
         {
-            Reg1Value = ValueModel.Reg1Value,
-            RegDate = ValueModel.RegDate,
-            ValueTypeDescription = ValueModel.ValueTypeDescription,
-            ValueTypeUnit = ValueModel.ValueTypeUnit
-        };
-        if (SelectedCustomer is not null)
-        {
-            SelectedCustomer.Values.Add(Value);
-            await _valueService.AddValueAsync(Value);
-            ValuesListData.Add(Value);
+            SelectedCustomer.Values = new List<Value>();
         }
     }
 }
