@@ -1,4 +1,4 @@
-﻿@page "/ValueDetails"
+﻿@page "/valueDetails"
 @using DataAccess.Library
 @using DataAccess.Library.Services
 @inject ICustomerService _customerService
@@ -10,12 +10,12 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-4">
-            <EditForm class="form-inline my-2 row g-3" Model="@valueModel" OnValidSubmit="AddValues">
+            <EditForm class="form-inline my-2 row g-3" Model="@ValueModel" OnValidSubmit="AddValues">
                 @* TODO add lables for all properies *@
-                <InputNumber class="form-control mx-2 my-2" @bind-value="valueModel.reg1Value" />
-                <InputDate class="form-control mx-2 my-2" @bind-value="valueModel.regDate" />
-                <InputText class="form-control mx-2 my-2" @bind-Value="valueModel.valueTypeDescription" />
-                <InputText class="form-control mx-2 my-2" @bind-Value="valueModel.valueTypeUnit" />
+                <InputNumber class="form-control mx-2 my-2" @bind-value="ValueModel.Reg1Value" />
+                <InputDate class="form-control mx-2 my-2" @bind-value="ValueModel.RegDate" />
+                <InputText class="form-control mx-2 my-2" @bind-Value="ValueModel.ValueTypeDescription" />
+                <InputText class="form-control mx-2 my-2" @bind-Value="ValueModel.ValueTypeUnit" />
                 <div class="d-flex justify-content-end">
                     <button class="btn btn-primary" type="submit">New Value</button>
                 </div>
@@ -66,24 +66,24 @@
 
 
 @code {
-    public List<Value> valuesList;
-    private DisplayValueModel valueModel = new DisplayValueModel();
+    public List<Value> ValuesList;
+    private DisplayValueModel ValueModel = new DisplayValueModel();
 
     protected override async Task OnInitializedAsync()
     {
         //customerList = await _customerService.GetAllCustomersAsync();
-        valuesList = await _valueService.GetAllValuesAsync();
+        ValuesList = await _valueService.GetAllValuesAsync();
     }
     private async Task AddValues()
     {
-        Value value = new Value
+        Value Value = new Value
         {
-            reg1Value = valueModel.reg1Value,
-            regDate = valueModel.regDate,
-            valueTypeDescription = valueModel.valueTypeDescription,
-            valueTypeUnit = valueModel.valueTypeUnit
+            Reg1Value = ValueModel.Reg1Value,
+            RegDate = ValueModel.RegDate,
+            ValueTypeDescription = ValueModel.ValueTypeDescription,
+            ValueTypeUnit = ValueModel.ValueTypeUnit
         };
-        await _valueService.AddValueAsync(value);
-        valuesList.Add(value);
+        await _valueService.AddValueAsync(Value);
+        ValuesList.Add(Value);
     }
 }

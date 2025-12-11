@@ -21,40 +21,40 @@ namespace DataAccess.Library.Services
             return _db.Customer.ToListAsync();
         }
 
-        public async Task AddCustomerAsync(Customer customer)
+        public async Task AddCustomerAsync(Customer Customer)
         {
-            _db.Customer.Add(customer);
+            _db.Customer.Add(Customer);
             await _db.SaveChangesAsync();
         }
 
         public async Task<Customer> GetCustomerByIdAsync(int Id)
         {
-            var customerById = await _db.Customer.FindAsync(Id);
-            if (customerById is null)
+            var CustomerById = await _db.Customer.FindAsync(Id);
+            if (CustomerById is null)
             {
                 throw new Exception($"Customer with Id: {Id} not found");
             }
             else
-                return customerById;
+                return CustomerById;
         }
 
-        public async Task UpdateCustomerAsync(Customer customer)
+        public async Task UpdateCustomerAsync(Customer Customer)
         {
-            var existingCustomer = _db.Customer.FindAsync(customer.ExternalCode);
-            if (existingCustomer.Result is null)
+            var ExistingCustomer = _db.Customer.FindAsync(Customer.ExternalCode);
+            if (ExistingCustomer.Result is null)
             {
-                throw new Exception($"Customer with Id {customer.ExternalCode} not found.");
+                throw new Exception($"Customer with Id {Customer.ExternalCode} not found.");
             }
             else
             {
-                existingCustomer.Result.MpCode = customer.MpCode;
-                existingCustomer.Result.Name = customer.Name;
-                existingCustomer.Result.Street = customer.Street;
-                existingCustomer.Result.SerialNo = customer.SerialNo;
-                existingCustomer.Result.Values = customer.Values;
+                ExistingCustomer.Result.MpCode = Customer.MpCode;
+                ExistingCustomer.Result.Name = Customer.Name;
+                ExistingCustomer.Result.Street = Customer.Street;
+                ExistingCustomer.Result.SerialNo = Customer.SerialNo;
+                ExistingCustomer.Result.Values = Customer.Values;
                 //to do map  values
             }
-            _db.Update(customer);
+            _db.Update(Customer);
             await _db.SaveChangesAsync();
         }
 

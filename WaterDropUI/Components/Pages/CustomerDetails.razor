@@ -1,4 +1,4 @@
-﻿@page "/CustomerDetails"
+﻿@page "/customerDetails"
 @using DataAccess.Library
 @using DataAccess.Library.Services
 @using System.Threading.Tasks
@@ -12,13 +12,13 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-4">
-            <EditForm class="form-inline my-2 row g-3" Model="@customerModel" OnValidSubmit="AddCustomer">
+            <EditForm class="form-inline my-2 row g-3" Model="@CustomerModel" OnValidSubmit="AddCustomer">
                 <DataAnnotationsValidator />
                 <ValidationSummary />
-                <InputText class="form-control mx-2" @bind-Value="customerModel.Name" Placeholder="Name" />
-                <InputNumber class="form-control mx-2" @bind-Value="customerModel.MpCode" Placeholder="MpCode" />
-                <InputText class="form-control mx-2" @bind-Value="customerModel.Street" Placeholder="Street" />
-                <InputNumber class="form-control mx-2" @bind-Value="customerModel.SerialNo" Placeholder="SerialNo" />
+                <InputText class="form-control mx-2" @bind-Value="CustomerModel.Name" Placeholder="Name" />
+                <InputNumber class="form-control mx-2" @bind-Value="CustomerModel.MpCode" Placeholder="MpCode" />
+                <InputText class="form-control mx-2" @bind-Value="CustomerModel.Street" Placeholder="Street" />
+                <InputNumber class="form-control mx-2" @bind-Value="CustomerModel.SerialNo" Placeholder="SerialNo" />
                 <div class="d-flex justify-content-end">
                     <button class="btn btn-primary" type="submit">Add Customer</button>
                 </div>
@@ -47,12 +47,12 @@
     </thead>
     <tbody>
 
-        @foreach (var customer in customerList)
+        @foreach (var customer in CustomerList)
         {
             <tr>
                 <td>
                     @* TODO:Ternary operator *@
-                    @if (@customerLoaded)
+                    @if (CustomerLoaded)
                     {
                         @SelectedCustomer?.Name
                     }
@@ -62,7 +62,7 @@
                     }
                 </td>
                 <td>
-                    @if (@customerLoaded)
+                    @if (CustomerLoaded)
                     {
                         @SelectedCustomer?.MpCode
                     }
@@ -72,7 +72,7 @@
                     }
                 </td>
                 <td>
-                    @if (@customerLoaded)
+                    @if (CustomerLoaded)
                     {
                         @SelectedCustomer?.Street
                     }
@@ -82,7 +82,7 @@
                     }
                 </td>
                 <td>
-                    @if (@customerLoaded)
+                    @if (CustomerLoaded)
                     {
                         @SelectedCustomer?.SerialNo
                     }
@@ -112,50 +112,50 @@
 
 @code {
 
-    private void NavigateToCustomersList() => Navigation.NavigateTo("CustomersList");
-    private void NavigateToValuesList(int? Id) => Navigation.NavigateTo($"ValuesList/{Id}");
-    private void NavigateToValuesDetails() => Navigation.NavigateTo("ValueDetails");
+    private void NavigateToCustomersList() => Navigation.NavigateTo("customersList");
+    private void NavigateToValuesList(int? Id) => Navigation.NavigateTo($"valuesList/{Id}");
+    private void NavigateToValuesDetails() => Navigation.NavigateTo("valueDetails");
 
     public Customer? SelectedCustomer { get; set; }
-    private bool customerLoaded = false;
+    private bool CustomerLoaded = false;
 
-    public List<Customer> customerList;
-    public DisplayCustomerModel customerModel = new DisplayCustomerModel();
+    public List<Customer> CustomerList;
+    public DisplayCustomerModel CustomerModel = new DisplayCustomerModel();
 
-    public List<Value> valuesList;
-    private DisplayValueModel valueModel = new DisplayValueModel();
+    public List<Value> ValuesList;
+    private DisplayValueModel ValueModel = new DisplayValueModel();
 
     protected override async Task OnInitializedAsync()
     {
-        customerList = await _customerService.GetAllCustomersAsync();
+        CustomerList = await _customerService.GetAllCustomersAsync();
         //valuesList = await _valueService.GetAllValuesAsync();
     }
 
     private async Task AddValues()
     {
-        Value value = new Value
+        Value Value = new Value
         {
-            reg1Value = valueModel.reg1Value,
-            regDate = valueModel.regDate,
-            valueTypeDescription = valueModel.valueTypeDescription,
-            valueTypeUnit = valueModel.valueTypeUnit
+            Reg1Value = ValueModel.Reg1Value,
+            RegDate = ValueModel.RegDate,
+            ValueTypeDescription = ValueModel.ValueTypeDescription,
+            ValueTypeUnit = ValueModel.ValueTypeUnit
         };
-        await _valueService.AddValueAsync(value);
-        valuesList.Add(value);
+        await _valueService.AddValueAsync(Value);
+        ValuesList.Add(Value);
 
     }
     private async Task AddCustomer()
     {
-        Customer customer = new Customer
+        Customer Customer = new Customer
         {
-            MpCode = customerModel.MpCode,
-            Name = customerModel.Name,
-            SerialNo = customerModel?.SerialNo,
-            Street = customerModel?.Street,
-            Values = valuesList
+            MpCode = CustomerModel.MpCode,
+            Name = CustomerModel.Name,
+            SerialNo = CustomerModel?.SerialNo,
+            Street = CustomerModel?.Street,
+            Values = ValuesList
         };
-        await _customerService.AddCustomerAsync(customer);
-        customerList.Add(customer);
+        await _customerService.AddCustomerAsync(Customer);
+        CustomerList.Add(Customer);
     }
 
     private async Task LoadCustomer(int Id)
@@ -165,18 +165,18 @@
 
     private async Task UpdateCustomer()
     {
-        var existing = await _customerService.GetAllCustomersAsync();
+        var Existing = await _customerService.GetAllCustomersAsync();
 
-        Customer customer = new Customer
+        Customer Customer = new Customer
         {
-            MpCode = customerModel.MpCode,
-            Name = customerModel.Name,
-            SerialNo = customerModel?.SerialNo,
-            Street = customerModel?.Street,
-            Values = valuesList
+            MpCode = CustomerModel.MpCode,
+            Name = CustomerModel.Name,
+            SerialNo = CustomerModel?.SerialNo,
+            Street = CustomerModel?.Street,
+            Values = ValuesList
         };
-        await _customerService.UpdateCustomerAsync(customer);
-        customerList.Add(customer);
+        await _customerService.UpdateCustomerAsync(Customer);
+        CustomerList.Add(Customer);
     }
 
 }

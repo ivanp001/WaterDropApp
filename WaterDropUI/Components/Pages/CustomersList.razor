@@ -1,4 +1,4 @@
-﻿@page "/CustomersList"
+﻿@page "/customersList"
 
 @using DataAccess.Library
 @using DataAccess.Library.Services
@@ -44,7 +44,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var customer in customerList)
+            @foreach (var customer in CustomerList)
             {
                 <tr>
                     <td>
@@ -79,20 +79,18 @@
     </table>
 </div>
 @code {
-    private void NavigateToCustomerDetails() => Navigation.NavigateTo("CustomerDetails");
-    private void NavigateToValuesList(int? Id) => Navigation.NavigateTo($"ValuesList/{Id}");
-    private void NavigateToValuesDetails() => Navigation.NavigateTo("ValueDetails");
+    private void NavigateToCustomerDetails() => Navigation.NavigateTo("customerDetails");
+    private void NavigateToValuesList(int? Id) => Navigation.NavigateTo($"valuesList/{Id}");
+    private void NavigateToValuesDetails() => Navigation.NavigateTo("valueDetails");
 
     public Customer? SelectedCustomer { get; set; }
-    public List<Customer> customerList;
+    public List<Customer> CustomerList;
     protected override async Task OnInitializedAsync()
     {
-        customerList = await _customerService.GetAllCustomersAsync();
+        CustomerList = await _customerService.GetAllCustomersAsync();
     }
     private async Task LoadCustomer(int Id)
     {
         SelectedCustomer = await _customerService.GetCustomerByIdAsync(Id);
     }
-
-
 }

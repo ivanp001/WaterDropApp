@@ -13,27 +13,31 @@ namespace DataAccess.Library.Services
         {
             _db = db;
         }
+
         public Task<List<Value>> GetAllValuesAsync()
         {
             return _db.Values.ToListAsync();
         }
-        public async Task AddValueAsync(Value value)
+
+        public async Task AddValueAsync(Value Value)
         {
-            _db.Values.Add(value);
+            _db.Values.Add(Value);
             await _db.SaveChangesAsync();
         }
+
         public async Task<List<Value>> GetValuesByIdAsync(int Id)
         {
             //todo value  find by FirstOrDefaultAsync(x => x.reg1Value == Id)
-            var valueById = await _db.Values.ToListAsync();
+            var ValueById = await _db.Values.ToListAsync();
+ 
 
 
-            if (valueById is null)
+            if (ValueById is null)
             {
                 throw new Exception($"Value with Id: {Id} not found");
             }
             else
-                return valueById;
+                return ValueById;
         }
     }
 }

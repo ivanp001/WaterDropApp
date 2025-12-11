@@ -1,4 +1,4 @@
-﻿@page "/ValuesList/{customerId:int}"
+﻿@page "/valuesList/{customerId:int}"
 @using DataAccess.Library
 @using DataAccess.Library.Services
 @inject NavigationManager Navigation
@@ -28,7 +28,6 @@
         </div>
     </div>
 
-
     <table class="table">
         <thead>
             <tr>
@@ -52,16 +51,16 @@
             {
                 <tr>
                     <td>
-                        @value.reg1Value
+                        @value.Reg1Value
                     </td>
                     <td>
-                        @value.regDate
+                        @value.RegDate
                     </td>
                     <td>
-                        @value.valueTypeDescription
+                        @value.ValueTypeDescription
                     </td>
                     <td>
-                        @value.valueTypeUnit
+                        @value.ValueTypeUnit
                     </td>
                     <td></td>
                 </tr>
@@ -72,21 +71,19 @@
 
 @code {
     [Parameter]
-    public int customerId { get; set; }
+    public int CustomerId { get; set; }
     public Customer? SelectedCustomer { get; set; }
     public List<Value>? CustomerValues { get; set; }
-    private void NavigateToCustomersList() => Navigation.NavigateTo("CustomersList");
-    private void NavigateToValuesDetails() => Navigation.NavigateTo("ValueDetails");
+    private void NavigateToCustomersList() => Navigation.NavigateTo("customersList");
+    private void NavigateToValuesDetails() => Navigation.NavigateTo("valueDetails");
 
-    public List<Value> valuesList;
-    private DisplayValueModel valueModel = new DisplayValueModel();
-
+    public List<Value> ValuesListData;
+    private DisplayValueModel ValueModel = new DisplayValueModel();
 
     protected override async Task OnInitializedAsync()
     {
-        //customerList = await _customerService.GetAllCustomersAsync();
-        CustomerValues = await _valueService.GetValuesByIdAsync(customerId);
-        SelectedCustomer = await _customerService.GetCustomerByIdAsync(customerId);
+        CustomerValues = await _valueService.GetValuesByIdAsync(CustomerId);
+        SelectedCustomer = await _customerService.GetCustomerByIdAsync(CustomerId);
     }
 
     private async Task LoadCustomer(int customerId)
@@ -96,18 +93,18 @@
 
     private async Task AddValues()
     {
-        Value value = new Value
+        Value Value = new Value
         {
-            reg1Value = valueModel.reg1Value,
-            regDate = valueModel.regDate,
-            valueTypeDescription = valueModel.valueTypeDescription,
-            valueTypeUnit = valueModel.valueTypeUnit
+            Reg1Value = ValueModel.Reg1Value,
+            RegDate = ValueModel.RegDate,
+            ValueTypeDescription = ValueModel.ValueTypeDescription,
+            ValueTypeUnit = ValueModel.ValueTypeUnit
         };
         if (SelectedCustomer is not null)
         {
-            SelectedCustomer.Values.Add(value);
-            await _valueService.AddValueAsync(value);
-            valuesList.Add(value);
+            SelectedCustomer.Values.Add(Value);
+            await _valueService.AddValueAsync(Value);
+            ValuesListData.Add(Value);
         }
     }
 }

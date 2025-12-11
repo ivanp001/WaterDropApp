@@ -10,23 +10,23 @@ namespace DataAccess.Library
         public DbSet<Customer> Customer { get; set; }
         public DbSet<Value> Values { get; set; }
 
-        public AppDbContext(DbContextOptions<AppDbContext> options)
-        : base(options)
+        public AppDbContext(DbContextOptions<AppDbContext> Options)
+        : base(Options)
         {
         }
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder ModelBuilder)
         {
-            modelBuilder.Entity<Customer>(entity =>
+            ModelBuilder.Entity<Customer>(Entity =>
             {
-                entity.HasKey(p => p.ExternalCode);
+                Entity.HasKey(p => p.ExternalCode);
 
-                entity.HasMany(p => p.Values);
+                Entity.HasMany(p => p.Values);
             });
 
 
-            modelBuilder.Entity<Value>(entity =>
+            ModelBuilder.Entity<Value>(Entity =>
             {
-                entity.HasKey(p => new { p.reg1Value, p.regDate });
+                Entity.HasKey(p => new { p.Reg1Value, p.RegDate });
             });
         }
     }

@@ -3,11 +3,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DataAccess.Library
 {
+
     public class Value
     {
-        public double? reg1Value { get; set; }
-        public DateTime? regDate { get; set; }
-        public string? valueTypeDescription { get; set; }
-        public string? valueTypeUnit { get; set; }
+        public int CustomerId { get; set; }
+        public double? Reg1Value { get; set; }
+        public DateTime? RegDate { get; set; }
+        public string? ValueTypeDescription { get; set; }
+        public string? ValueTypeUnit { get; set; }
     }
 }
