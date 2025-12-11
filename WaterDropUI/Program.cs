@@ -1,3 +1,6 @@
+using DataAccess.Library;
+using DataAccess.Library.Services;
+using Microsoft.EntityFrameworkCore;
 using WaterDropAppUI.Models;
 using WaterDropUI.Components;
 
@@ -8,6 +11,14 @@ namespace WaterDropUI
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            //register in-memory connection
+            builder.Services.AddDbContext<AppDbContext>(options =>
+              options.UseInMemoryDatabase(builder.Configuration.GetConnectionString("TestDB")));
+
+            //register services to access DB
+            builder.Services.AddScoped<ICustomerService, CustomerService>();
+            builder.Services.AddScoped<IValueService, ValueService>();
 
             // Add services to the container.
             builder.Services.AddRazorComponents()

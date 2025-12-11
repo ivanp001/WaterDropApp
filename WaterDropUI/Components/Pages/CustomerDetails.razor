@@ -1,0 +1,182 @@
+﻿@page "/CustomerDetails"
+@using DataAccess.Library
+@using DataAccess.Library.Services
+@using System.Threading.Tasks
+
+@inject ICustomerService _customerService
+@inject IValueService _valueService;
+@inject NavigationManager Navigation
+
+<h3>New Customer</h3>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4">
+            <EditForm class="form-inline my-2 row g-3" Model="@customerModel" OnValidSubmit="AddCustomer">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <InputText class="form-control mx-2" @bind-Value="customerModel.Name" Placeholder="Name" />
+                <InputNumber class="form-control mx-2" @bind-Value="customerModel.MpCode" Placeholder="MpCode" />
+                <InputText class="form-control mx-2" @bind-Value="customerModel.Street" Placeholder="Street" />
+                <InputNumber class="form-control mx-2" @bind-Value="customerModel.SerialNo" Placeholder="SerialNo" />
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-primary" type="submit">Add Customer</button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+<h4>Customers List</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                MpCode
+            </th>
+            <th>
+                Street
+            </th>
+            <th>
+                Serial No
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var customer in customerList)
+        {
+            <tr>
+                <td>
+                    @* TODO:Ternary operator *@
+                    @if (@customerLoaded)
+                    {
+                        @SelectedCustomer?.Name
+                    }
+                    else
+                    {
+                        @customer.Name
+                    }
+                </td>
+                <td>
+                    @if (@customerLoaded)
+                    {
+                        @SelectedCustomer?.MpCode
+                    }
+                    else
+                    {
+                        @customer.MpCode
+                    }
+                </td>
+                <td>
+                    @if (@customerLoaded)
+                    {
+                        @SelectedCustomer?.Street
+                    }
+                    else
+                    {
+                        @customer.Street
+                    }
+                </td>
+                <td>
+                    @if (@customerLoaded)
+                    {
+                        @SelectedCustomer?.SerialNo
+                    }
+                    else
+                    {
+                        @customer.SerialNo
+                    }
+                </td>
+                <td>
+                    <button class="btn btn-outline-primary btn-sm"
+                            @onclick="() => NavigateToValuesList(customer.ExternalCode)">
+                        Values List
+                    </button>
+
+                </td>
+                <td>
+                    <button class="btn btn-outline-success btn-sm"
+                            @onclick="() => NavigateToValuesDetails()">
+                        New Value
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@code {
+
+    private void NavigateToCustomersList() => Navigation.NavigateTo("CustomersList");
+    private void NavigateToValuesList(int? Id) => Navigation.NavigateTo($"ValuesList/{Id}");
+    private void NavigateToValuesDetails() => Navigation.NavigateTo("ValueDetails");
+
+    public Customer? SelectedCustomer { get; set; }
+    private bool customerLoaded = false;
+
+    public List<Customer> customerList;
+    public DisplayCustomerModel customerModel = new DisplayCustomerModel();
+
+    public List<Value> valuesList;
+    private DisplayValueModel valueModel = new DisplayValueModel();
+
+    protected override async Task OnInitializedAsync()
+    {
+        customerList = await _customerService.GetAllCustomersAsync();
+        //valuesList = await _valueService.GetAllValuesAsync();
+    }
+
+    private async Task AddValues()
+    {
+        Value value = new Value
+        {
+            reg1Value = valueModel.reg1Value,
+            regDate = valueModel.regDate,
+            valueTypeDescription = valueModel.valueTypeDescription,
+            valueTypeUnit = valueModel.valueTypeUnit
+        };
+        await _valueService.AddValueAsync(value);
+        valuesList.Add(value);
+
+    }
+    private async Task AddCustomer()
+    {
+        Customer customer = new Customer
+        {
+            MpCode = customerModel.MpCode,
+            Name = customerModel.Name,
+            SerialNo = customerModel?.SerialNo,
+            Street = customerModel?.Street,
+            Values = valuesList
+        };
+        await _customerService.AddCustomerAsync(customer);
+        customerList.Add(customer);
+    }
+
+    private async Task LoadCustomer(int Id)
+    {
+        SelectedCustomer = await _customerService.GetCustomerByIdAsync(Id);
+    }
+
+    private async Task UpdateCustomer()
+    {
+        var existing = await _customerService.GetAllCustomersAsync();
+
+        Customer customer = new Customer
+        {
+            MpCode = customerModel.MpCode,
+            Name = customerModel.Name,
+            SerialNo = customerModel?.SerialNo,
+            Street = customerModel?.Street,
+            Values = valuesList
+        };
+        await _customerService.UpdateCustomerAsync(customer);
+        customerList.Add(customer);
+    }
+
+}

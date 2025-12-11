@@ -1,70 +1,113 @@
-﻿@page "/ValueList"
+﻿@page "/ValuesList/{customerId:int}"
+@using DataAccess.Library
+@using DataAccess.Library.Services
 @inject NavigationManager Navigation
+@inject IValueService _valueService;
+@inject ICustomerService _customerService
 
-<h3>Values List</h3>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class=" d-flex justify-content-Start">
+                <h3>Values List For: @SelectedCustomer?.Name</h3>
+            </div>
+        </div> 
+        <div class="col-sm-3">
+            <div class=" d-flex justify-content-end">
+                <button class="btn btn-outline-primary" @onclick="NavigateToCustomersList">
+                    Customers List
+                </button>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class=" d-flex justify-content-end">
+                <button class="btn btn-primary" @onclick="NavigateToValuesDetails">
+                    New Value
+                </button>
+            </div>
+        </div>
+    </div>
 
-@* //TODO Show Customer data *@
 
-
-
-
-
-<button class="btn btn-primary" @onclick="NavigateToValuesDetails">
-    New Value
-</button>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Reg1Value
-            </th>
-            <th>
-                RegDate
-            </th>
-            <th>
-                VlueTypeDescription
-            </th>
-            <th>
-                ValueTypeUnit
-            </th>
-
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var value in valuesList)
-        {
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    @value.reg1Value
-                </td>
-                <td>
-                    @value.regDate
-                </td>
-                <td>
-                    @value.valueTypeDescription
-                </td>
-                <td>
-                    @value.valueTypeUnit
-                </td>
-                <td></td>
-            </tr>
-        }
+                <th>
+                    Reg1Value
+                </th>
+                <th>
+                    RegDate
+                </th>
+                <th>
+                    VlueTypeDescription
+                </th>
+                <th>
+                    ValueTypeUnit
+                </th>
 
-    </tbody>
-</table>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var value in CustomerValues)
+            {
+                <tr>
+                    <td>
+                        @value.reg1Value
+                    </td>
+                    <td>
+                        @value.regDate
+                    </td>
+                    <td>
+                        @value.valueTypeDescription
+                    </td>
+                    <td>
+                        @value.valueTypeUnit
+                    </td>
+                    <td></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 @code {
-    //TODO Use DataAccess Layer
-
+    [Parameter]
+    public int customerId { get; set; }
+    public Customer? SelectedCustomer { get; set; }
+    public List<Value>? CustomerValues { get; set; }
+    private void NavigateToCustomersList() => Navigation.NavigateTo("CustomersList");
     private void NavigateToValuesDetails() => Navigation.NavigateTo("ValueDetails");
-    public List<Value> valuesList = new List<Value>();
-    private Value valueModel = new Value();
 
-    private void AddValues()
+    public List<Value> valuesList;
+    private DisplayValueModel valueModel = new DisplayValueModel();
 
+
+    protected override async Task OnInitializedAsync()
     {
-        valuesList.Add(valueModel);
-        valueModel = new Value();
+        //customerList = await _customerService.GetAllCustomersAsync();
+        CustomerValues = await _valueService.GetValuesByIdAsync(customerId);
+        SelectedCustomer = await _customerService.GetCustomerByIdAsync(customerId);
+    }
+
+    private async Task LoadCustomer(int customerId)
+    {
+        SelectedCustomer = await _customerService.GetCustomerByIdAsync(customerId);
+    }
+
+    private async Task AddValues()
+    {
+        Value value = new Value
+        {
+            reg1Value = valueModel.reg1Value,
+            regDate = valueModel.regDate,
+            valueTypeDescription = valueModel.valueTypeDescription,
+            valueTypeUnit = valueModel.valueTypeUnit
+        };
+        if (SelectedCustomer is not null)
+        {
+            SelectedCustomer.Values.Add(value);
+            await _valueService.AddValueAsync(value);
+            valuesList.Add(value);
+        }
     }
 }

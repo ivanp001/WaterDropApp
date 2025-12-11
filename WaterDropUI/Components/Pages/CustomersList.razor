@@ -1,0 +1,98 @@
+﻿@page "/CustomersList"
+
+@using DataAccess.Library
+@using DataAccess.Library.Services
+@inject ICustomerService _customerService
+@inject NavigationManager Navigation
+
+@* Show all customers *@
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class=" d-flex justify-content-Start">
+                <h3>Customers List</h3>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class=" d-flex justify-content-end">
+                <button class="btn btn-outline-primary" @onclick="NavigateToCustomerDetails">
+                    New Customer
+                </button>
+            </div>
+        </div>
+    </div>
+
+    @* TODO CRUD buttons on customer *@
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    MpCode
+                </th>
+                <th>
+                    Street
+                </th>
+                <th>
+                    Serial Number
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var customer in customerList)
+            {
+                <tr>
+                    <td>
+                        @customer.Name
+                    </td>
+                    <td>
+                        @customer.MpCode
+                    </td>
+                    <td>
+                        @customer.Street
+                    </td>
+                    <td>
+                        @customer.SerialNo
+                    </td>
+                    <td>
+                        <button class="btn btn-outline-primary btn-sm"
+                                @onclick="() => NavigateToValuesList(customer.ExternalCode)">
+                            Values List
+                        </button>
+
+                    </td>
+                    <td>
+                        <button class="btn btn-outline-success btn-sm"
+                                @onclick="() => NavigateToValuesDetails()">
+                            New Value
+                        </button>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+</div>
+@code {
+    private void NavigateToCustomerDetails() => Navigation.NavigateTo("CustomerDetails");
+    private void NavigateToValuesList(int? Id) => Navigation.NavigateTo($"ValuesList/{Id}");
+    private void NavigateToValuesDetails() => Navigation.NavigateTo("ValueDetails");
+
+    public Customer? SelectedCustomer { get; set; }
+    public List<Customer> customerList;
+    protected override async Task OnInitializedAsync()
+    {
+        customerList = await _customerService.GetAllCustomersAsync();
+    }
+    private async Task LoadCustomer(int Id)
+    {
+        SelectedCustomer = await _customerService.GetCustomerByIdAsync(Id);
+    }
+
+
+}
