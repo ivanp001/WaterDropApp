@@ -22,74 +22,86 @@
     </div>
 </div>
 
-<div class="container">
+<EditForm class="form-inline row g-3 my-2" Model="@ValueModel" OnValidSubmit="AddValues">
     <div class="row">
-        <div class="col-sm-4">
-            <EditForm class="form-inline row g-3" Model="@ValueModel" OnValidSubmit="AddValues">
-                <InputNumber class="form-control mx-2" @bind-value="ValueModel.Reg1Value" Placeholder="Reg1Value" />
-                <InputDate class="form-control mx-2" @bind-value="ValueModel.RegDate" Placeholder="RegDate" />
+        <div class="col-md-4">
+            <div class="mb-3">
+                <InputNumber class="form-control mx-2 col-sm-4" @bind-value="ValueModel.Reg1Value" Placeholder="Reg1Value" />
+            </div>
+            <div class="mb-3">
+                <InputDate class="form-control mx-2 col-sm-4" @bind-value="ValueModel.RegDate" Placeholder="RegDate" />
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="mb-3">
                 <InputText class="form-control mx-2" @bind-Value="ValueModel.ValueTypeDescription" Placeholder="ValueTypeDescription" />
+            </div>
+            <div class="mb-3">
                 <InputText class="form-control mx-2" @bind-Value="ValueModel.ValueTypeUnit" Placeholder="ValueTypeUnit" />
+            </div>
+            <div class="mb-3">
                 <div class="d-flex justify-content-end">
                     <button class="btn btn-primary" type="submit">
                         Submit
                     </button>
                 </div>
-            </EditForm>
-        </div>
-    </div>
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-6  my-3">
-                <div class="d-flex justify-content-start">
-                    <h3>Values List for customer: @SelectedCustomer?.Name </h3>
-                </div>
             </div>
         </div>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        Reg1Value
-                    </th>
-                    <th>
-                        RegDate
-                    </th>
-                    <th>
-                        VlueTypeDescription
-                    </th>
-                    <th>
-                        ValueTypeUnit
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var value in SelectedCustomer?.Values)
-                {
-                    <tr>
-                        <td>
-                            @value.Reg1Value
-                        </td>
-                        <td>
-                            @value.RegDate
-                        </td>
-                        <td>
-                            @value.ValueTypeDescription
-                        </td>
-                        <td>
-                            @value.ValueTypeUnit
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
     </div>
+
+</EditForm>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="d-flex justify-content-start">
+                <h3>Values List for customer @SelectedCustomer?.Name </h3>
+            </div>
+        </div>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Reg1Value
+                </th>
+                <th>
+                    RegDate
+                </th>
+                <th>
+                    VlueTypeDescription
+                </th>
+                <th>
+                    ValueTypeUnit
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var value in SelectedCustomer?.Values)
+            {
+                <tr>
+                    <td>
+                        @value.Reg1Value
+                    </td>
+                    <td>
+                        @value.RegDate
+                    </td>
+                    <td>
+                        @value.ValueTypeDescription
+                    </td>
+                    <td>
+                        @value.ValueTypeUnit
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
 
 @code {
 
     private void NavigateToValuesList(int? Id) => Navigation.NavigateTo($"valuesList/{Id}");
-    
+
     [Parameter]
     public int CustomerId { get; set; }
     private DisplayValueModel ValueModel = new DisplayValueModel();

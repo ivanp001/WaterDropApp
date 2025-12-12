@@ -20,31 +20,38 @@
     </div>
 </div>
 
-<div class="container">
+<EditForm class="form-inline row g-3  my-2" Model="@CustomerModel" OnValidSubmit="Update">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
     <div class="row">
         <div class="col-sm-4">
-            <EditForm class="form-inline row g-3" Model="@CustomerModel" OnValidSubmit="Update">
-                <DataAnnotationsValidator />
-                <ValidationSummary />
+            <div class="mb-3">
                 <InputText class="form-control mx-2" @bind-Value="CustomerModel.Name" Placeholder="Name" />
+            </div>
+            <div class="mb-3">
                 <InputNumber class="form-control mx-2" @bind-Value="CustomerModel.MpCode" Placeholder="MpCode" />
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="mb-3">
                 <InputText class="form-control mx-2" @bind-Value="CustomerModel.Street" Placeholder="Street" />
+            </div>
+            <div class="mb-3">
                 <InputNumber class="form-control mx-2" @bind-Value="CustomerModel.SerialNo" Placeholder="SerialNo" />
-                <div class="d-flex justify-content-end">
-                    <button class="btn btn-primary" type="submit">
-                        Update
-                    </button>
-                </div>
-            </EditForm>
+            </div>
+            <div class="d-flex justify-content-end">
+                <button class="btn btn-primary" type="submit">
+                    Update
+                </button>
+            </div>
         </div>
     </div>
-</div>
+</EditForm>
+
 <div class="container">
     <div class="row">
-        <div class="col-sm-6  my-3">
-            <div class="d-flex justify-content-start">
-                <h3>Customer Data:</h3>
-            </div>
+        <div class="col-sm-6">
+            <h3>Customer Data</h3>
         </div>
     </div>
     <table class="table">
