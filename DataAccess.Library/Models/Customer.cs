@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace DataAccess.Library
+﻿namespace DataAccess.Library
 {
     public class Customer
     {

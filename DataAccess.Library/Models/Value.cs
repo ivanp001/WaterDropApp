@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
-
-namespace DataAccess.Library
+﻿namespace DataAccess.Library
 {
 
     public class Value

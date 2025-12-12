@@ -1,9 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Text.Json;
-using static DataAccess.Library.Services.CustomerService;
 
 namespace DataAccess.Library.Services
 {
@@ -51,9 +46,7 @@ namespace DataAccess.Library.Services
                 _db.Entry(ExistingCustomer).CurrentValues.SetValues(Customer);
             }
             await _db.SaveChangesAsync();
-
             var customers = _db.Customer.ToListAsync();
-
         }
 
         public async Task DeleteCustomerAsync(int CustomerId)

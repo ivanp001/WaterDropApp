@@ -1,7 +1,4 @@
-﻿
-using System.Threading.Tasks;
-
-namespace DataAccess.Library.Services
+﻿namespace DataAccess.Library.Services
 {
     public interface ICustomerService
     {
