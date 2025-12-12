@@ -73,52 +73,22 @@
                 {
                     <tr>
                         <td>
-                            @* TODO:Ternary operator *@
-                            @if (CustomerLoaded)
-                            {
-                                @SelectedCustomer?.Name
-                            }
-                            else
-                            {
-                                @customer.Name
-                            }
+                            @customer.Name
                         </td>
                         <td>
-                            @if (CustomerLoaded)
-                            {
-                                @SelectedCustomer?.MpCode
-                            }
-                            else
-                            {
-                                @customer.MpCode
-                            }
+                            @customer.MpCode
                         </td>
                         <td>
-                            @if (CustomerLoaded)
-                            {
-                                @SelectedCustomer?.Street
-                            }
-                            else
-                            {
-                                @customer.Street
-                            }
+                            @customer.Street
                         </td>
                         <td>
-                            @if (CustomerLoaded)
-                            {
-                                @SelectedCustomer?.SerialNo
-                            }
-                            else
-                            {
-                                @customer.SerialNo
-                            }
+                            @customer.SerialNo
                         </td>
                         <td>
                             <button class="btn btn-outline-primary btn-sm btn-sm"
                                     @onclick="() => NavigateToValuesList(customer.ExternalCode)">
                                 Values List
                             </button>
-
                         </td>
                         <td>
                             <button class="btn btn-outline-success btn-sm btn-sm"
@@ -145,16 +115,11 @@
     </div>
 </div>
 
-
 @code {
-
     private void NavigateToCustomersList() => Navigation.NavigateTo("/");
     private void NavigateToValuesList(int? Id) => Navigation.NavigateTo($"valuesList/{Id}");
     private void NavigateToValuesDetails(int? Id) => Navigation.NavigateTo($"valueDetails/{Id}");
     private void NavigateToUpdateCustomer(int Id) => Navigation.NavigateTo($"updateCustomer/{Id}");
-
-    //remove
-    public bool CustomerLoaded { get; set; }
 
     [Parameter]
     public int CustomerId { get; set; }
@@ -169,8 +134,6 @@
     protected override async Task OnInitializedAsync()
     {
         CustomersList = await _customerService.GetAllCustomersAsync();
-
-        //SelectedCustomer = await _customerService.GetCustomerByIdAsync(CustomerId);
     }
 
     private async Task AddCustomer()

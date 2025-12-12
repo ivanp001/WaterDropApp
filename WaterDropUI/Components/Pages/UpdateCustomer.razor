@@ -3,7 +3,6 @@
 @inject ICustomerService _customerService
 @inject NavigationManager Navigation
 
-
 <div class="container">
     <div class="row">
         <div class="col-sm-6">
@@ -20,7 +19,6 @@
         </div>
     </div>
 </div>
-
 
 <div class="container">
     <div class="row">
@@ -41,42 +39,50 @@
         </div>
     </div>
 </div>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Name
-            </th>
-            <th>
-                MpCode
-            </th>
-            <th>
-                Street
-            </th>
-            <th>
-                Serial Number
-            </th>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6  my-3">
+            <div class="d-flex justify-content-start">
+                <h3>Customer Data:</h3>
+            </div>
+        </div>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    MpCode
+                </th>
+                <th>
+                    Street
+                </th>
+                <th>
+                    Serial Number
+                </th>
 
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-                @SelectedCustomer.Name
-            </td>
-            <td>
-                @SelectedCustomer.MpCode
-            </td>
-            <td>
-                @SelectedCustomer.Street
-            </td>
-            <td>
-                @SelectedCustomer.SerialNo
-            </td>
-        </tr>
-    </tbody>
-</table>
-
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    @SelectedCustomer.Name
+                </td>
+                <td>
+                    @SelectedCustomer.MpCode
+                </td>
+                <td>
+                    @SelectedCustomer.Street
+                </td>
+                <td>
+                    @SelectedCustomer.SerialNo
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
 @code {
     private void NavigateToCustomerDetails(int? Id) => Navigation.NavigateTo($"customerDetails/{Id}");

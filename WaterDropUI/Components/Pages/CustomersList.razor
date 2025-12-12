@@ -3,8 +3,6 @@
 @inject ICustomerService _customerService
 @inject NavigationManager Navigation
 
-@* Show all customers *@
-
 <div class="container">
     <div class="row">
         <div class="col-sm-6">
@@ -58,10 +56,10 @@
                                     
                 </tr>
             }
-
         </tbody>
     </table>
 </div>
+
 @code {
     private void NavigateToCustomerDetails(int? Id) => Navigation.NavigateTo($"customerDetails/{Id}");
     public List<Customer> CustomerList;
