@@ -5,6 +5,7 @@
 @inject IValueService _valueService;
 @inject NavigationManager Navigation
 
+    <BarChart @ref="barChart" Width="500" Height="300" />
 <div class="container">
     <div class="row">
         <div class="col-sm-6">
@@ -38,47 +39,53 @@
             </EditForm>
         </div>
     </div>
-
-
-    <h5>Values List for: @SelectedCustomer?.Name </h5>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    Reg1Value
-                </th>
-                <th>
-                    RegDate
-                </th>
-                <th>
-                    VlueTypeDescription
-                </th>
-                <th>
-                    ValueTypeUnit
-                </th>
-
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var value in SelectedCustomer?.Values)
-            {
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6  my-3">
+                <div class="d-flex justify-content-start">
+                    <h3>Values List for customer: @SelectedCustomer?.Name </h3>
+                </div>
+            </div>
+        </div>
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>
-                        @value.Reg1Value
-                    </td>
-                    <td>
-                        @value.RegDate
-                    </td>
-                    <td>
-                        @value.ValueTypeDescription
-                    </td>
-                    <td>
-                        @value.ValueTypeUnit
-                    </td>
+                    <th>
+                        Reg1Value
+                    </th>
+                    <th>
+                        RegDate
+                    </th>
+                    <th>
+                        VlueTypeDescription
+                    </th>
+                    <th>
+                        ValueTypeUnit
+                    </th>
+
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var value in SelectedCustomer?.Values)
+                {
+                    <tr>
+                        <td>
+                            @value.Reg1Value
+                        </td>
+                        <td>
+                            @value.RegDate
+                        </td>
+                        <td>
+                            @value.ValueTypeDescription
+                        </td>
+                        <td>
+                            @value.ValueTypeUnit
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
 
 @code {

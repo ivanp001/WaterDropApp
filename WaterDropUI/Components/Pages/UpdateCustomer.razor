@@ -1,9 +1,26 @@
 ﻿@page "/updateCustomer/{customerId:int}"
 @using Microsoft.Extensions.Hosting
 @inject ICustomerService _customerService
-@inject Blazored.Toast.Services.IToastService Toast
+@inject NavigationManager Navigation
 
-<h3>Update Customer</h3>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="d-flex justify-content-start">
+                <h3>Update Customer</h3>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class=" d-flex justify-content-end">
+                <button class="btn btn-outline-primary" @onclick="() => NavigateToCustomerDetails(CustomerId)">
+                    Customers Details
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div class="container">
     <div class="row">
@@ -24,9 +41,46 @@
         </div>
     </div>
 </div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                MpCode
+            </th>
+            <th>
+                Street
+            </th>
+            <th>
+                Serial Number
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                @SelectedCustomer.Name
+            </td>
+            <td>
+                @SelectedCustomer.MpCode
+            </td>
+            <td>
+                @SelectedCustomer.Street
+            </td>
+            <td>
+                @SelectedCustomer.SerialNo
+            </td>
+        </tr>
+    </tbody>
+</table>
 
 
 @code {
+    private void NavigateToCustomerDetails(int? Id) => Navigation.NavigateTo($"customerDetails/{Id}");
+
     [Parameter]
     public int CustomerId { get; set; }
     public Customer? SelectedCustomer { get; set; }
@@ -36,8 +90,6 @@
 
     public List<Value> ValuesList;
     private DisplayValueModel ValueModel = new DisplayValueModel();
-
-    string Message = "";
 
     protected override async Task OnInitializedAsync()
     {
@@ -68,6 +120,6 @@
             Values = ValuesList
         };
         await _customerService.UpdateCustomerAsync(Customer);
-        Toast.ShowSuccess("Customer updated!");
+        await OnInitializedAsync();
     }
 }

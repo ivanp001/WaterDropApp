@@ -3,7 +3,6 @@
 @inject ICustomerService _customerService
 @inject IValueService _valueService;
 @inject NavigationManager Navigation
-@inject Blazored.Toast.Services.IToastService Toast
 
 <div class="container">
     <div class="row">
@@ -42,88 +41,110 @@
         </div>
     </div>
 
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6  my-2">
+                <div class="d-flex justify-content-start">
+                    <h3>Customers List</h3>
+                </div>
+            </div>
+        </div>
 
-    <h5>Customers List</h5>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    Name
-                </th>
-                <th>
-                    MpCode
-                </th>
-                <th>
-                    Street
-                </th>
-                <th>
-                    Serial No
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-
-            @foreach (var customer in CustomersList)
-            {
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>
-                        @* TODO:Ternary operator *@
-                        @if (CustomerLoaded)
-                        {
-                            @SelectedCustomer?.Name
-                        }
-                        else
-                        {
-                            @customer.Name
-                        }
-                    </td>
-                    <td>
-                        @if (CustomerLoaded)
-                        {
-                            @SelectedCustomer?.MpCode
-                        }
-                        else
-                        {
-                            @customer.MpCode
-                        }
-                    </td>
-                    <td>
-                        @if (CustomerLoaded)
-                        {
-                            @SelectedCustomer?.Street
-                        }
-                        else
-                        {
-                            @customer.Street
-                        }
-                    </td>
-                    <td>
-                        @if (CustomerLoaded)
-                        {
-                            @SelectedCustomer?.SerialNo
-                        }
-                        else
-                        {
-                            @customer.SerialNo
-                        }
-                    </td>
-                    <td>
-                        <button class="btn btn-danger btn-sm col-auto"
-                                @onclick="() => DeleteCustomer(customer.ExternalCode)">
-                            Delete
-                        </button>
-                    </td>
-                    <td>
-                        <button class="btn btn-warning btn-sm col-auto"
-                                @onclick="() => NavigateToUpdateCustomer(customer.ExternalCode)">
-                            Update
-                        </button>
-                    </td>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        MpCode
+                    </th>
+                    <th>
+                        Street
+                    </th>
+                    <th>
+                        Serial No
+                    </th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+
+                @foreach (var customer in CustomersList)
+                {
+                    <tr>
+                        <td>
+                            @* TODO:Ternary operator *@
+                            @if (CustomerLoaded)
+                            {
+                                @SelectedCustomer?.Name
+                            }
+                            else
+                            {
+                                @customer.Name
+                            }
+                        </td>
+                        <td>
+                            @if (CustomerLoaded)
+                            {
+                                @SelectedCustomer?.MpCode
+                            }
+                            else
+                            {
+                                @customer.MpCode
+                            }
+                        </td>
+                        <td>
+                            @if (CustomerLoaded)
+                            {
+                                @SelectedCustomer?.Street
+                            }
+                            else
+                            {
+                                @customer.Street
+                            }
+                        </td>
+                        <td>
+                            @if (CustomerLoaded)
+                            {
+                                @SelectedCustomer?.SerialNo
+                            }
+                            else
+                            {
+                                @customer.SerialNo
+                            }
+                        </td>
+                        <td>
+                            <button class="btn btn-outline-primary btn-sm btn-sm"
+                                    @onclick="() => NavigateToValuesList(customer.ExternalCode)">
+                                Values List
+                            </button>
+
+                        </td>
+                        <td>
+                            <button class="btn btn-outline-success btn-sm btn-sm"
+                                    @onclick="() => NavigateToValuesDetails(customer.ExternalCode)">
+                                Values Details
+                            </button>
+                        </td>
+                        <td>
+                            <button class="btn btn-outline-warning btn-sm col-auto"
+                                    @onclick="() => NavigateToUpdateCustomer(customer.ExternalCode)">
+                                Update
+                            </button>
+                        </td>
+                        <td>
+                            <button class="btn btn-danger btn-sm col-auto"
+                                    @onclick="() => DeleteCustomer(customer.ExternalCode)">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
+
 
 @code {
 
@@ -131,7 +152,7 @@
     private void NavigateToValuesList(int? Id) => Navigation.NavigateTo($"valuesList/{Id}");
     private void NavigateToValuesDetails(int? Id) => Navigation.NavigateTo($"valueDetails/{Id}");
     private void NavigateToUpdateCustomer(int Id) => Navigation.NavigateTo($"updateCustomer/{Id}");
-    
+
     //remove
     public bool CustomerLoaded { get; set; }
 
@@ -170,6 +191,5 @@
     {
         await _customerService.DeleteCustomerAsync(CustomerId);
         await OnInitializedAsync();
-        Toast.ShowSuccess("Customer Deleted!");
     }
 }
