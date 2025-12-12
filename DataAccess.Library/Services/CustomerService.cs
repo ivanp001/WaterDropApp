@@ -43,33 +43,28 @@ namespace DataAccess.Library.Services
         }
 
         public async Task UpdateCustomerAsync(Customer Customer)
+
         {
-            var ExistingCustomer = _db.Customer.FindAsync(Customer.ExternalCode);
-            if (ExistingCustomer.Result is not null)
+            var ExistingCustomer = await _db.Customer.FindAsync(Customer.ExternalCode);
+            if (ExistingCustomer is not null)
             {
-                ExistingCustomer.Result.MpCode = Customer.MpCode;
-                ExistingCustomer.Result.Name = Customer.Name;
-                ExistingCustomer.Result.Street = Customer.Street;
-                ExistingCustomer.Result.SerialNo = Customer.SerialNo;
-                ExistingCustomer.Result.Values = Customer.Values;
-                //to do map  values
+                _db.Entry(ExistingCustomer).CurrentValues.SetValues(Customer);
             }
-            else
-            {
-                throw new Exception($"Customer with Id {Customer.ExternalCode} not found.");
-            }
-            _db.Update(Customer);
             await _db.SaveChangesAsync();
+
+            var customers = _db.Customer.ToListAsync();
+
         }
 
-
-
-
-        //public async Task DeleteCustomerAsync(Customer customer)
-        //{
-        //    //_db.Customer.Add(customer);
-        //    //await _db.SaveChangesAsync();
-        //}
+        public async Task DeleteCustomerAsync(int CustomerId)
+        {
+            var ExistingCustomer = await _db.Customer.FindAsync(CustomerId);
+            if (ExistingCustomer is not null)
+            {
+                _db.Customer.Remove(ExistingCustomer);
+            }
+            await _db.SaveChangesAsync();
+        }
     }
 }
 

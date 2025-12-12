@@ -7,7 +7,8 @@ namespace DataAccess.Library.Services
     {
         Task<List<Customer>> GetAllCustomersAsync();
         Task AddCustomerAsync(Customer Customer);
-        Task UpdateCustomerAsync(Customer Customer);
         Task<Customer> GetCustomerByIdAsync(int Id);
+        Task UpdateCustomerAsync(Customer Customer);
+        Task DeleteCustomerAsync(int CustomerId);
     }
 }

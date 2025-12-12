@@ -1,8 +1,9 @@
-﻿@page "/customerDetails"
+﻿@page "/customerDetails/{customerId:int?}"
 
 @inject ICustomerService _customerService
 @inject IValueService _valueService;
 @inject NavigationManager Navigation
+@inject Blazored.Toast.Services.IToastService Toast
 
 <div class="container">
     <div class="row">
@@ -62,7 +63,7 @@
         </thead>
         <tbody>
 
-            @foreach (var customer in CustomerList)
+            @foreach (var customer in CustomersList)
             {
                 <tr>
                     <td>
@@ -107,16 +108,15 @@
                         }
                     </td>
                     <td>
-                        <button class="btn btn-outline-primary btn-sm"
-                                @onclick="() => NavigateToValuesList(customer.ExternalCode)">
-                            Values List
+                        <button class="btn btn-danger btn-sm col-auto"
+                                @onclick="() => DeleteCustomer(customer.ExternalCode)">
+                            Delete
                         </button>
-
                     </td>
                     <td>
-                        <button class="btn btn-outline-success btn-sm"
-                                @onclick="() => NavigateToValuesDetails(customer.ExternalCode)">
-                            New Value
+                        <button class="btn btn-warning btn-sm col-auto"
+                                @onclick="() => NavigateToUpdateCustomer(customer.ExternalCode)">
+                            Update
                         </button>
                     </td>
                 </tr>
@@ -130,11 +130,16 @@
     private void NavigateToCustomersList() => Navigation.NavigateTo("/");
     private void NavigateToValuesList(int? Id) => Navigation.NavigateTo($"valuesList/{Id}");
     private void NavigateToValuesDetails(int? Id) => Navigation.NavigateTo($"valueDetails/{Id}");
+    private void NavigateToUpdateCustomer(int Id) => Navigation.NavigateTo($"updateCustomer/{Id}");
+    
+    //remove
+    public bool CustomerLoaded { get; set; }
 
+    [Parameter]
+    public int CustomerId { get; set; }
     public Customer? SelectedCustomer { get; set; }
-    private bool CustomerLoaded = false;
 
-    public List<Customer> CustomerList;
+    public List<Customer> CustomersList;
     public DisplayCustomerModel CustomerModel = new DisplayCustomerModel();
 
     public List<Value> ValuesList;
@@ -142,7 +147,9 @@
 
     protected override async Task OnInitializedAsync()
     {
-        CustomerList = await _customerService.GetAllCustomersAsync();
+        CustomersList = await _customerService.GetAllCustomersAsync();
+
+        //SelectedCustomer = await _customerService.GetCustomerByIdAsync(CustomerId);
     }
 
     private async Task AddCustomer()
@@ -156,28 +163,13 @@
             Values = ValuesList
         };
         await _customerService.AddCustomerAsync(Customer);
-        CustomerList.Add(Customer);
+        CustomersList.Add(Customer);
     }
 
-    private async Task LoadCustomer(int Id)
+    private async Task DeleteCustomer(int CustomerId)
     {
-        SelectedCustomer = await _customerService.GetCustomerByIdAsync(Id);
+        await _customerService.DeleteCustomerAsync(CustomerId);
+        await OnInitializedAsync();
+        Toast.ShowSuccess("Customer Deleted!");
     }
-
-    private async Task UpdateCustomer()
-    {
-        var Existing = await _customerService.GetAllCustomersAsync();
-
-        Customer Customer = new Customer
-        {
-            MpCode = CustomerModel.MpCode,
-            Name = CustomerModel.Name,
-            SerialNo = CustomerModel?.SerialNo,
-            Street = CustomerModel?.Street,
-            Values = ValuesList
-        };
-        await _customerService.UpdateCustomerAsync(Customer);
-        CustomerList.Add(Customer);
-    }
-
 }

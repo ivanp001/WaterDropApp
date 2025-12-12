@@ -14,14 +14,12 @@
         </div>
         <div class="col-sm-6">
             <div class=" d-flex justify-content-end">
-                <button class="btn btn-outline-primary" @onclick="NavigateToCustomerDetails">
-                    New Customer
+                <button class="btn btn-outline-primary" @onclick="() => NavigateToCustomerDetails(0)">
+                    Customers Details
                 </button>
             </div>
         </div>
     </div>
-
-    @* TODO CRUD buttons on customer *@
 
     <table class="table">
         <thead>
@@ -58,18 +56,18 @@
                         @customer.SerialNo
                     </td>
                     <td>
-                        <button class="btn btn-outline-primary btn-sm"
+                        <button class="btn btn-outline-primary btn-sm btn-sm"
                                 @onclick="() => NavigateToValuesList(customer.ExternalCode)">
                             Values List
                         </button>
 
                     </td>
                     <td>
-                        <button class="btn btn-outline-success btn-sm"
+                        <button class="btn btn-outline-success btn-sm btn-sm"
                                 @onclick="() => NavigateToValuesDetails(customer.ExternalCode)">
                             New Value
                         </button>
-                    </td>
+                    </td>                  
                 </tr>
             }
 
@@ -77,11 +75,13 @@
     </table>
 </div>
 @code {
-    private void NavigateToCustomerDetails() => Navigation.NavigateTo("customerDetails");
+    private void NavigateToCustomerDetails(int? Id) => Navigation.NavigateTo($"customerDetails/{Id}");
     private void NavigateToValuesList(int? Id) => Navigation.NavigateTo($"valuesList/{Id}");
     private void NavigateToValuesDetails(int? Id) => Navigation.NavigateTo($"valueDetails/{Id}");
 
     public List<Customer> CustomerList;
+
+    public DisplayCustomerModel CustomerModel = new DisplayCustomerModel();
     protected override async Task OnInitializedAsync()
     {
         CustomerList = await _customerService.GetAllCustomersAsync();

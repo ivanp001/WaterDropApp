@@ -1,0 +1,73 @@
+﻿@page "/updateCustomer/{customerId:int}"
+@using Microsoft.Extensions.Hosting
+@inject ICustomerService _customerService
+@inject Blazored.Toast.Services.IToastService Toast
+
+<h3>Update Customer</h3>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4">
+            <EditForm class="form-inline row g-3" Model="@CustomerModel" OnValidSubmit="Update">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <InputText class="form-control mx-2" @bind-Value="CustomerModel.Name" Placeholder="Name" />
+                <InputNumber class="form-control mx-2" @bind-Value="CustomerModel.MpCode" Placeholder="MpCode" />
+                <InputText class="form-control mx-2" @bind-Value="CustomerModel.Street" Placeholder="Street" />
+                <InputNumber class="form-control mx-2" @bind-Value="CustomerModel.SerialNo" Placeholder="SerialNo" />
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-primary" type="submit">
+                        Update
+                    </button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    [Parameter]
+    public int CustomerId { get; set; }
+    public Customer? SelectedCustomer { get; set; }
+
+    public List<Customer> CustomersList = new List<Customer>();
+    public DisplayCustomerModel CustomerModel = new DisplayCustomerModel();
+
+    public List<Value> ValuesList;
+    private DisplayValueModel ValueModel = new DisplayValueModel();
+
+    string Message = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        SelectedCustomer = await _customerService.GetCustomerByIdAsync(CustomerId);
+        await LoadCustomer(CustomerId);
+    }
+
+    private async Task LoadCustomer(int CustomerId)
+    {
+        if (SelectedCustomer is not null)
+        {
+            CustomerModel.MpCode = SelectedCustomer.MpCode;
+            CustomerModel.Name = SelectedCustomer.Name;
+            CustomerModel.Street = SelectedCustomer.Street;
+            CustomerModel.SerialNo = SelectedCustomer.SerialNo;
+        }
+    }
+
+    public async Task Update()
+    {
+        Customer Customer = new Customer
+        {
+            ExternalCode = CustomerId,
+            MpCode = CustomerModel.MpCode,
+            Name = CustomerModel.Name,
+            SerialNo = CustomerModel?.SerialNo,
+            Street = CustomerModel?.Street,
+            Values = ValuesList
+        };
+        await _customerService.UpdateCustomerAsync(Customer);
+        Toast.ShowSuccess("Customer updated!");
+    }
+}
