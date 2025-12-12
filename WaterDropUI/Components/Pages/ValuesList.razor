@@ -1,4 +1,5 @@
 ﻿@page "/valuesList/{customerId:int}"
+
 @inject ICustomerService _customerService
 @inject IValueService _valueService;
 @inject NavigationManager Navigation
@@ -75,9 +76,6 @@
     [Parameter]
     public int CustomerId { get; set; }
     public Customer? SelectedCustomer { get; set; }
-    public List<Value>? CustomerValues { get; set; }
-    public List<Value> ValuesListData;
-    private DisplayValueModel ValueModel = new DisplayValueModel();
 
     protected override async Task OnInitializedAsync()
     {

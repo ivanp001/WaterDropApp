@@ -1,4 +1,5 @@
 ﻿@page "/updateCustomer/{customerId:int}"
+
 @using Microsoft.Extensions.Hosting
 @inject ICustomerService _customerService
 @inject NavigationManager Navigation
@@ -69,7 +70,6 @@
                 <th>
                     Serial Number
                 </th>
-
             </tr>
         </thead>
         <tbody>
@@ -97,16 +97,14 @@
     [Parameter]
     public int CustomerId { get; set; }
     public Customer? SelectedCustomer { get; set; }
-
-    public List<Customer> CustomersList = new List<Customer>();
-    public DisplayCustomerModel CustomerModel = new DisplayCustomerModel();
-
     public List<Value> ValuesList;
-    private DisplayValueModel ValueModel = new DisplayValueModel();
+    public DisplayCustomerModel CustomerModel = new DisplayCustomerModel();
 
     protected override async Task OnInitializedAsync()
     {
         SelectedCustomer = await _customerService.GetCustomerByIdAsync(CustomerId);
+       
+        //map current values to the model
         await LoadCustomer(CustomerId);
     }
 
@@ -133,6 +131,7 @@
             Values = ValuesList
         };
         await _customerService.UpdateCustomerAsync(Customer);
+        //call OnInitializedAsync to refresh the list
         await OnInitializedAsync();
     }
 }

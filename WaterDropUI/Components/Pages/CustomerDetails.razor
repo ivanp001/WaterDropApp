@@ -13,7 +13,6 @@
         </div>
         <div class="col-sm-6">
             <div class="d-flex justify-content-end">
-
                 <button class="btn btn-outline-primary" @onclick="() => NavigateToCustomersList()">
                     Customers List
                 </button>
@@ -21,7 +20,6 @@
         </div>
     </div>
 </div>
-
 
 <EditForm class="form-inline row g-3  my-2" Model="@CustomerModel" OnValidSubmit="AddCustomer">
     <DataAnnotationsValidator />
@@ -123,7 +121,6 @@
     </table>
 </div>
 
-
 @code {
     private void NavigateToCustomersList() => Navigation.NavigateTo("/");
     private void NavigateToValuesList(int? Id) => Navigation.NavigateTo($"valuesList/{Id}");
@@ -132,14 +129,11 @@
 
     [Parameter]
     public int CustomerId { get; set; }
-    public Customer? SelectedCustomer { get; set; }
-
     public List<Customer> CustomersList;
     public DisplayCustomerModel CustomerModel = new DisplayCustomerModel();
-
     public List<Value> ValuesList;
-    private DisplayValueModel ValueModel = new DisplayValueModel();
 
+    //load all customers, show valid operations
     protected override async Task OnInitializedAsync()
     {
         CustomersList = await _customerService.GetAllCustomersAsync();
@@ -162,6 +156,8 @@
     private async Task DeleteCustomer(int CustomerId)
     {
         await _customerService.DeleteCustomerAsync(CustomerId);
+
+        //call OnInitializedAsync to refresh the list
         await OnInitializedAsync();
     }
 }
