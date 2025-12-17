@@ -2,10 +2,10 @@
 WaterDropApp UI to show customers info, presenting full list to overview all customers in a list, this app can show Values that can be added for different customers, with its own parameters, Customer`s data can be updated and deleted and can have one or more values connected to its name.
 
 ##Technologies Used
-# EntityFrameworkCore
-# EntityFrameworkCore.InMemory
-# BlazorServer
-# Bootstrap
+* EntityFrameworkCore
+* EntityFrameworkCore.InMemory
+* BlazorServer
+* Bootstrap
 
 ## Using The App
 1. When the application lanches, it should look like this:
